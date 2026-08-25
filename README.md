@@ -16,7 +16,7 @@ The network consists of two Cisco switches and multiple end devices divided into
 | 20   | HR         |
 | 30   | Finance    |
 
-![Network Topology](screenshots/topology.png)
+![Network Topology](screenshots/topology.jpeg)
 
 ### Technologies Used
 
@@ -44,11 +44,11 @@ show vlan brief
 
 #### SW1
 
-![SW1 VLAN Configuration](screenshots/vlan-configuration-sw1.png)
+![SW1 VLAN Configuration](screenshots/vlan-configuration-sw1.jpeg)
 
 #### SW2
 
-![SW2 VLAN Configuration](screenshots/vlan-configuration-sw2.png)
+![SW2 VLAN Configuration](screenshots/vlan-configuration-sw2.jpeg)
 
 ---
 
@@ -66,11 +66,11 @@ show vtp status
 
 #### SW1 — VTP Server
 
-![SW1 VTP Status](screenshots/vtp-status-sw1.png)
+![SW1 VTP Status](screenshots/vtp-status-sw1.jpeg)
 
 #### SW2 — VTP Client
 
-![SW2 VTP Status](screenshots/vtp-status-sw2.png)
+![SW2 VTP Status](screenshots/vtp-status-sw2.jpeg)
 
 ---
 
@@ -87,11 +87,11 @@ show ip interface brief
 
 #### SW1
 
-![SW1 Management IP](screenshots/management-ip-sw1.png)
+![SW1 Management IP](screenshots/management-ip-sw1.jpeg)
 
 #### SW2
 
-![SW2 Management IP](screenshots/management-ip-sw2.png)
+![SW2 Management IP](screenshots/management-ip-sw2.jpeg)
 
 ---
 
@@ -105,11 +105,11 @@ show interfaces fa0/4 switchport
 
 #### SW1
 
-![SW1 Trunk Configuration](screenshots/trunk-sw1.png)
+![SW1 Trunk Configuration](screenshots/trunk-sw1.jpeg)
 
 #### SW2
 
-![SW2 Trunk Configuration](screenshots/trunk-sw2.png)
+![SW2 Trunk Configuration](screenshots/trunk-sw2.jpeg)
 
 ---
 
@@ -121,7 +121,7 @@ Configured SSH for secure remote management and verified access from SW2 to SW1.
 ssh -l admin 192.168.10.2
 ```
 
-![SSH Test](screenshots/ssh-test.png)
+![SSH Test](screenshots/ssh-test.jpeg)
 
 ---
 
@@ -138,7 +138,7 @@ show port-security
 show port-security address
 ```
 
-![Port Security](screenshots/port-security.png)
+![Port Security](screenshots/port-security.jpeg)
 
 ---
 
@@ -150,7 +150,7 @@ The network was tested at multiple levels.
 
 Devices within the same VLAN successfully communicated using ICMP/Ping.
 
-![Successful Connectivity Test](screenshots/connectivity-test.png)
+![Successful Connectivity Test](screenshots/connectivity-test.jpeg)
 
 ---
 
@@ -158,7 +158,7 @@ Devices within the same VLAN successfully communicated using ICMP/Ping.
 
 A connectivity test between devices in different VLANs resulted in packet loss, confirming the expected Layer 2 segmentation.
 
-![VLAN Isolation Test](screenshots/vlan-isolation-test.png)
+![VLAN Isolation Test](screenshots/vlan-isolation-test.jpeg)
 
 ---
 
@@ -178,7 +178,7 @@ The violation was confirmed using:
 show port-security interface fa0/1
 ```
 
-![Security Violation](screenshots/security-violation.png)
+![Security Violation](screenshots/security-violation.jpeg)
 
 After removing the unauthorized device, the port was restored and returned to:
 
@@ -186,7 +186,7 @@ After removing the unauthorized device, the port was restored and returned to:
 Secure-up
 ```
 
-![Port Recovery](screenshots/port-recovery.png)
+![Port Recovery](screenshots/port-recovery.jpeg)
 
 ---
 
