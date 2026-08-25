@@ -26,13 +26,13 @@ The network contains two Cisco switches and six PCs divided into three departmen
 
 VLANs 10, 20, and 30 were created and assigned to the appropriate access ports.
 
-```bash id="b7wz5j"
+```bash
 show vlan brief
 ```
 
 **Figure 2: VLAN Configuration on SW1**
 
-![VLAN Configuration](screenshots/vlan-configuration-sw1.jpeg)
+![VLAN Configuration](screenshots/show-vlan-brief.jpeg)
 
 VTP was configured to synchronize VLAN information between the switches:
 
@@ -40,17 +40,17 @@ VTP was configured to synchronize VLAN information between the switches:
 * **SW2:** VTP Client
 * **Domain:** `OFFICE`
 
-```bash id="k3o3a5"
+```bash
 show vtp status
 ```
 
 **Figure 3: VTP Server Configuration on SW1**
 
-![SW1 VTP Server](screenshots/vtp-status-sw1.jpeg)
+![SW1 VTP Server](screenshots/show-vtp-status-sw1.jpeg)
 
 **Figure 4: VTP Client Configuration on SW2**
 
-![SW2 VTP Client](screenshots/vtp-status-sw2.jpeg)
+![SW2 VTP Client](screenshots/show-vtp-status-sw2.jpeg)
 
 ---
 
@@ -63,18 +63,18 @@ Management IPs were configured on VLAN 10:
 * SW1: `192.168.10.2/24`
 * SW2: `192.168.10.3/24`
 
-```bash id="k6r7fy"
+```bash
 show interfaces fa0/4 switchport
 show ip interface brief
 ```
 
 **Figure 5: Trunk Configuration on SW1**
 
-![Trunk Configuration](screenshots/trunk-sw1.jpeg)
+![Trunk Configuration](screenshots/show-interfaces-switchport.jpeg)
 
 **Figure 6: Management IP Configuration**
 
-![Management IP](screenshots/management-ip-sw1.jpeg)
+![Management IP](screenshots/show-ip-interface-brief.jpeg)
 
 ---
 
@@ -82,7 +82,7 @@ show ip interface brief
 
 SSH was configured and successfully tested by accessing SW1 remotely from SW2.
 
-```bash id="5ud7ve"
+```bash
 ssh -l admin 192.168.10.2
 ```
 
@@ -100,7 +100,7 @@ The successful ping confirms connectivity between devices in the same VLAN, whil
 
 **Figure 8: Connectivity and VLAN Isolation Test**
 
-![Connectivity and VLAN Isolation Test](screenshots/connectivity-test.jpeg)
+![Connectivity and VLAN Isolation Test](screenshots/ping-test.jpeg)
 
 ---
 
@@ -110,23 +110,23 @@ Port Security was configured with **Sticky MAC**, a maximum of **1 MAC address p
 
 The switch learned the authorized devices and stored their MAC addresses as `SecureSticky`.
 
-```bash id="d25w8d"
+```bash
 show port-security address
 ```
 
 **Figure 9: Secure Sticky MAC Address Table**
 
-![Port Security](screenshots/port-security.jpeg)
+![Secure Sticky MAC Address Table](screenshots/show-port-security-address.jpeg)
 
 A different PC was then connected to **Fa0/1**. The switch detected the unauthorized MAC address and placed the port into **Secure-shutdown**.
 
-```bash id="p3tz5t"
+```bash
 show port-security interface fa0/1
 ```
 
 **Figure 10: Port Security Violation**
 
-![Security Violation](screenshots/security-violation.jpeg)
+![Port Security Violation](screenshots/show-port-security-interface-fa0-1.jpeg)
 
 After removing the unauthorized device, the port was restored to **Secure-up**.
 
@@ -141,3 +141,4 @@ After removing the unauthorized device, the port was restored to **Secure-up**.
 The network was successfully configured, tested, and secured.
 
 The project demonstrates practical implementation of **VLAN segmentation, VTP, 802.1Q trunking, SSH, connectivity testing, VLAN isolation, and Layer 2 Port Security**.
+
