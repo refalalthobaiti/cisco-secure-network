@@ -1,14 +1,14 @@
 # 🔐 Cisco Secure Network
 
-A hands-on Cisco networking project built in **Cisco Packet Tracer** to practice VLAN segmentation, VTP, trunking, SSH remote management, and Layer 2 port security.
+A hands-on **Cisco Packet Tracer** project focused on VLAN segmentation, VTP, trunking, SSH, and Layer 2 Port Security.
 
 ## 🎯 Project Objective
 
-The goal of this project was to design and configure a small segmented network and apply basic security controls to protect access ports from unauthorized devices.
+The goal was to build a segmented LAN and secure access ports against unauthorized devices.
 
-## 🗺️ Network Overview
+## 🗺️ Network Topology
 
-The network consists of two Cisco switches and multiple end devices divided into three departments:
+The network contains two Cisco switches and six PCs divided into three departments:
 
 | VLAN | Department |
 | ---- | ---------- |
@@ -16,182 +16,113 @@ The network consists of two Cisco switches and multiple end devices divided into
 | 20   | HR         |
 | 30   | Finance    |
 
-![Network Topology](screenshots/topology.jpeg)
+**Figure 1: LAN Network Topology Using Cisco Packet Tracer**
 
-### Technologies Used
-
-* Cisco Packet Tracer
-* VLANs
-* VTP
-* 802.1Q Trunking
-* SVI Management
-* SSH
-* Port Security
-* Sticky MAC
-* ICMP/Ping testing
+![LAN Network Topology](screenshots/topology.jpeg)
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ VLAN & VTP Configuration
 
-### VLANs
+VLANs 10, 20, and 30 were created and assigned to the appropriate access ports.
 
-Created and assigned VLANs according to the department structure.
+SW1 was configured as the **VTP Server**, while SW2 was configured as the **VTP Client** using the domain `OFFICE`.
 
 ```bash
 show vlan brief
-```
-
-#### SW1
-
-![SW1 VLAN Configuration](screenshots/vlan-configuration-sw1.jpeg)
-
-#### SW2
-
-![SW2 VLAN Configuration](screenshots/vlan-configuration-sw2.jpeg)
-
----
-
-### VTP
-
-Configured the switches using:
-
-* **SW1:** VTP Server
-* **SW2:** VTP Client
-* **Domain:** `OFFICE`
-
-```bash
 show vtp status
 ```
 
-#### SW1 — VTP Server
+**Figure 2: VLAN and VTP Configuration**
 
-![SW1 VTP Status](screenshots/vtp-status-sw1.jpeg)
+![VLAN Configuration](screenshots/vlan-configuration-sw1.jpeg)
 
-#### SW2 — VTP Client
-
-![SW2 VTP Status](screenshots/vtp-status-sw2.jpeg)
+![VTP Status](screenshots/vtp-status-sw1.jpeg)
 
 ---
 
-### Management IP
+## 🔗 Trunking & Management
 
-Configured management IP addresses on VLAN 10:
+The switch-to-switch link was configured as an **802.1Q trunk**, allowing VLANs 10, 20, and 30 to pass between the switches.
+
+Management IPs:
 
 * SW1: `192.168.10.2/24`
 * SW2: `192.168.10.3/24`
 
 ```bash
+show interfaces fa0/4 switchport
 show ip interface brief
 ```
 
-#### SW1
+**Figure 3: Trunk and Management Configuration**
 
-![SW1 Management IP](screenshots/management-ip-sw1.jpeg)
+![Trunk Configuration](screenshots/trunk-sw1.jpeg)
 
-#### SW2
-
-![SW2 Management IP](screenshots/management-ip-sw2.jpeg)
+![Management IP](screenshots/management-ip-sw1.jpeg)
 
 ---
 
-### Trunking
+## 🔐 SSH Remote Management
 
-Configured the switch-to-switch connection as an 802.1Q trunk and allowed VLANs 10, 20, and 30.
-
-```bash
-show interfaces fa0/4 switchport
-```
-
-#### SW1
-
-![SW1 Trunk Configuration](screenshots/trunk-sw1.jpeg)
-
-#### SW2
-
-![SW2 Trunk Configuration](screenshots/trunk-sw2.jpeg)
-
----
-
-### SSH
-
-Configured SSH for secure remote management and verified access from SW2 to SW1.
+SSH was configured and successfully tested by accessing SW1 remotely from SW2.
 
 ```bash
 ssh -l admin 192.168.10.2
 ```
 
+**Figure 4: Successful SSH Remote Access**
+
 ![SSH Test](screenshots/ssh-test.jpeg)
 
 ---
 
-### Port Security
+## 🧪 Connectivity & VLAN Testing
 
-Enabled Port Security on user-facing access ports with:
+Ping testing confirmed connectivity between the switches.
 
-* Maximum MAC addresses: `1`
-* Sticky MAC learning
-* Violation mode: `Shutdown`
+Devices within the **same VLAN** communicated successfully, while communication between **different VLANs** was blocked.
 
-```bash
-show port-security
-show port-security address
-```
+**Figure 5: Connectivity and VLAN Isolation Tests**
 
-![Port Security](screenshots/port-security.jpeg)
-
----
-
-## 🧪 Testing & Verification
-
-The network was tested at multiple levels.
-
-### ✅ Same-VLAN Connectivity
-
-Devices within the same VLAN successfully communicated using ICMP/Ping.
-
-![Successful Connectivity Test](screenshots/connectivity-test.jpeg)
-
----
-
-### 🚫 VLAN Isolation
-
-A connectivity test between devices in different VLANs resulted in packet loss, confirming the expected Layer 2 segmentation.
+![Connectivity Test](screenshots/connectivity-test.jpeg)
 
 ![VLAN Isolation Test](screenshots/vlan-isolation-test.jpeg)
 
 ---
 
-### 🚨 Port Security Violation
+## 🚨 Port Security Test
 
-A different device was connected to a protected port.
+Port Security was configured with **Sticky MAC**, a maximum of **1 MAC address per port**, and **Shutdown** violation mode.
 
-The switch detected the unauthorized MAC address and placed the port into:
+The switch learned the authorized devices and stored their MAC addresses as `SecureSticky`.
 
-```text
-Secure-shutdown
+```bash
+show port-security address
 ```
 
-The violation was confirmed using:
+**Figure 6: Secure Sticky MAC Address Table**
+
+![Port Security](screenshots/port-security.jpeg)
+
+A different PC was then connected to **Fa0/1**. The switch detected the unauthorized MAC address and placed the port into **Secure-shutdown**.
 
 ```bash
 show port-security interface fa0/1
 ```
 
+**Figure 7: Port Security Violation**
+
 ![Security Violation](screenshots/security-violation.jpeg)
 
-After removing the unauthorized device, the port was restored and returned to:
+After removing the unauthorized device, the port was restored to **Secure-up**.
 
-```text
-Secure-up
-```
+**Figure 8: Port Recovery**
 
 ![Port Recovery](screenshots/port-recovery.jpeg)
 
----
-
 ## 🏁 Result
 
-The network was successfully configured, tested, and secured as a Cisco Packet Tracer project.
+The network was successfully configured, tested, and secured.
 
-The project demonstrates practical implementation of **VLAN segmentation, VTP, 802.1Q trunking, switch management, SSH, connectivity testing, VLAN isolation, and Layer 2 Port Security**.
+The project demonstrates practical implementation of **VLAN segmentation, VTP, trunking, SSH, connectivity testing, and Layer 2 Port Security**.
