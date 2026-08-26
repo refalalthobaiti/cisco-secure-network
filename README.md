@@ -1,6 +1,6 @@
 # 🔐 Cisco Secure Network
 
-A hands-on **Cisco Packet Tracer** project focused on VLAN segmentation, VTP, 802.1Q trunking, SSH, and Layer 2 Port Security.
+A hands-on **Cisco Packet Tracer** project focused on VLAN segmentation, VTP, 802.1Q trunking, SSH, VLAN isolation, and Layer 2 Port Security.
 
 ## 🎯 Project Objective
 
@@ -56,25 +56,34 @@ show vtp status
 
 ## 🔗 Trunking & Management
 
-The switch-to-switch link was configured as an **802.1Q trunk**, allowing VLANs 10, 20, and 30 to pass between the switches.
-
-Management IPs were configured on VLAN 10:
-
-* SW1: `192.168.10.2/24`
-* SW2: `192.168.10.3/24`
+The link between SW1 and SW2 was configured as an **802.1Q trunk**, allowing VLANs 10, 20, and 30 to pass between the switches.
 
 ```bash
 show interfaces fa0/4 switchport
+```
+
+**Figure 5: 802.1Q Trunk Configuration**
+
+**SW1**
+
+![SW1 Trunk Configuration](screenshots/show-interfaces-fa0-4-switchport-sw1.jpeg)
+
+**SW2**
+
+![SW2 Trunk Configuration](screenshots/show-interfaces-fa0-4-switchport-sw2.jpeg)
+
+Management IPs were configured on VLAN 10:
+
+* **SW1:** `192.168.10.2/24`
+* **SW2:** `192.168.10.3/24`
+
+```bash
 show ip interface brief
 ```
 
-**Figure 5: Trunk Configuration on SW1**
+**Figure 6: Management IP Configuration on SW1**
 
-![Trunk Configuration](screenshots/show-interfaces-switchport.jpeg)
-
-**Figure 6: Management IP Configuration**
-
-![Management IP](screenshots/show-ip-interface-brief.jpeg)
+![Management IP Configuration](screenshots/show-ip-interface-brief.jpeg)
 
 ---
 
@@ -92,47 +101,75 @@ ssh -l admin 192.168.10.2
 
 ---
 
-## 🧪 Connectivity & VLAN Testing
+## 🧪 Switch Connectivity Testing
 
-Ping testing was used to verify network connectivity and VLAN isolation.
+A ping test was performed from **SW1 to SW2** to verify connectivity between the two switches.
 
-The successful ping confirms connectivity between devices in the same VLAN, while the failed ping confirms that communication between different VLANs is blocked.
+```bash
+ping 192.168.10.3
+```
 
-**Figure 8: Connectivity and VLAN Isolation Test**
+**Figure 8: Successful Ping Test from SW1 to SW2**
 
-![Connectivity and VLAN Isolation Test](screenshots/ping-test.jpeg)
+![Ping Test](screenshots/ping-sw1-to-sw2.jpeg)
+
+---
+
+## 🧪 VLAN Connectivity & Isolation Testing
+
+**Figure 9: VLAN Connectivity & Isolation Test**
+
+Devices within the same VLAN can communicate successfully, while communication between IT (VLAN 10) and HR (VLAN 20) is blocked.
+
+![VLAN Connectivity & Isolation Test](screenshots/vlan-connectivity-test.jpeg)
 
 ---
 
 ## 🚨 Port Security Test
 
-Port Security was configured with **Sticky MAC**, a maximum of **1 MAC address per port**, and **Shutdown** violation mode.
+Port Security was configured using **Sticky MAC**, with a maximum of **1 MAC address per port** and **Shutdown** violation mode.
 
-The switch learned the authorized devices and stored their MAC addresses as `SecureSticky`.
+The switch learned the authorized device's MAC address using **Sticky MAC**.
 
 ```bash
 show port-security address
 ```
 
-**Figure 9: Secure Sticky MAC Address Table**
+**Figure 10: Secure Sticky MAC Address Table**
 
 ![Secure Sticky MAC Address Table](screenshots/show-port-security-address.jpeg)
 
-A different PC was then connected to **Fa0/1**. The switch detected the unauthorized MAC address and placed the port into **Secure-shutdown**.
+A different PC was connected to **Fa0/1** after the authorized device's MAC address had been learned.
+
+The switch detected the unauthorized MAC address and, because the violation mode was set to **Shutdown**, automatically disabled the port and changed its status to **Secure-shutdown**.
+
+The **Security Violation Count: 1** confirmed that the unauthorized device was detected and blocked.
 
 ```bash
 show port-security interface fa0/1
 ```
 
-**Figure 10: Port Security Violation**
+**Figure 11: Port Security Violation**
 
 ![Port Security Violation](screenshots/show-port-security-interface-fa0-1.jpeg)
 
-After removing the unauthorized device, the port was restored to **Secure-up**.
+**Result:** Port Security successfully allowed the authorized device and blocked the unauthorized device.
 
-**Figure 11: Port Recovery**
+### 🔄 Port Recovery
+
+After removing the unauthorized device, the port was re-enabled for the authorized device.
+
+```bash
+interface fa0/1
+shutdown
+no shutdown
+```
+
+**Figure 12: Port Recovery**
 
 ![Port Recovery](screenshots/port-recovery.jpeg)
+
+The port returned to **Secure-up**, allowing the authorized device to access the network again.
 
 ---
 
@@ -140,5 +177,6 @@ After removing the unauthorized device, the port was restored to **Secure-up**.
 
 The network was successfully configured, tested, and secured.
 
-The project demonstrates practical implementation of **VLAN segmentation, VTP, 802.1Q trunking, SSH, connectivity testing, VLAN isolation, and Layer 2 Port Security**.
+The project demonstrates practical implementation of **VLAN segmentation, VTP, 802.1Q trunking, SSH, switch connectivity testing, VLAN isolation, Sticky MAC Port Security, security violation handling, and port recovery**.
+
 
